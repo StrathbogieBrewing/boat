@@ -52,11 +52,11 @@
         <div id="contdiv">
           <div class="slidecontainer">
             <h1>SPEED</h1>
-          <input type="range" min="0" max="8191" value="0" class="slider" id="speed">
+          <input type="range" min="0" max="20" value="0" class="slider" id="speed">
           </div>
           <div class="slidecontainer">
             <h1>DIRECTION</h1>
-          <input type="range" min="0" max="8191" value="0" class="slider" id="direction" >
+          <input type="range" min="-10" max="10" value="0" class="slider" id="direction" >
           </div>
         </div>
       </div>
@@ -92,7 +92,21 @@
         var speedSetting = document.getElementById('speed').value;
         var directionSetting = document.getElementById('direction').value;
         console.log('speed = ' + speedSetting + ',  direction = ' + directionSetting);
-        postWithTimeout('/api/v1/light/brightness', {red : Number(speedSetting), green : Number(directionSetting), blue : 0}, 1000);
+
+        var speed = Number(speedSetting) * 400.0;
+
+        var leftMotor = speed;
+        var rightMotor = speed;
+
+        if(Number(directionSetting) < 0.0){
+          leftMotor *= (1.0 + Number(directionSetting) / 10.0);
+        }
+
+        if(Number(directionSetting) > 0.0){
+          rightMotor *= (1.0 - Number(directionSetting) / 10.0);
+        }
+
+        postWithTimeout('/api/v1/light/brightness', {red : rightMotor, green : leftMotor, blue : 0}, 1000);
       }
 
       document.getElementById('speed').onchange = post;

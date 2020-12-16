@@ -140,14 +140,14 @@ static esp_err_t light_brightness_post_handler(httpd_req_t *req) {
   cJSON_Delete(root);
   httpd_resp_sendstr(req, "{\"status\": 0}");
 
-  ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE,
-          LEDC_CHANNEL_2, red, 1000);
-  ledc_fade_start(LEDC_LOW_SPEED_MODE,
-          LEDC_CHANNEL_2, LEDC_FADE_NO_WAIT);
-  ledc_set_fade_with_time(LEDC_LOW_SPEED_MODE,
-          LEDC_CHANNEL_3, green, 1000);
-  ledc_fade_start(LEDC_LOW_SPEED_MODE,
-          LEDC_CHANNEL_3, LEDC_FADE_NO_WAIT);
+  ledc_set_fade_with_time(LEDC_HIGH_SPEED_MODE,
+          LEDC_CHANNEL_0, red, 1000);
+  ledc_fade_start(LEDC_HIGH_SPEED_MODE,
+          LEDC_CHANNEL_0, LEDC_FADE_NO_WAIT);
+  ledc_set_fade_with_time(LEDC_HIGH_SPEED_MODE,
+          LEDC_CHANNEL_1, green, 1000);
+  ledc_fade_start(LEDC_HIGH_SPEED_MODE,
+          LEDC_CHANNEL_1, LEDC_FADE_NO_WAIT);
 
   return ESP_OK;
 }
@@ -183,27 +183,27 @@ void start_ledc(void) {
   ledc_timer_config_t ledc_timer = {
       .duty_resolution = LEDC_TIMER_13_BIT, // resolution of PWM duty
       .freq_hz = 5000,                      // frequency of PWM signal
-      .speed_mode = LEDC_LOW_SPEED_MODE,           // timer mode
-      .timer_num = LEDC_TIMER_1,           // timer index
+      .speed_mode = LEDC_HIGH_SPEED_MODE,           // timer mode
+      .timer_num = LEDC_TIMER_0,           // timer index
       .clk_cfg = LEDC_AUTO_CLK,             // Auto select the source clock
   };
 
   ledc_timer_config(&ledc_timer);
 
-  ledc_channel_config_t ledc_left = {.channel = LEDC_CHANNEL_2,
+  ledc_channel_config_t ledc_left = {.channel = LEDC_CHANNEL_0,
                                      .duty = 0,
                                      .gpio_num = 12,
-                                     .speed_mode = LEDC_LOW_SPEED_MODE,
+                                     .speed_mode = LEDC_HIGH_SPEED_MODE,
                                      .hpoint = 0,
-                                     .timer_sel = LEDC_TIMER_1};
+                                     .timer_sel = LEDC_TIMER_0};
   ledc_channel_config(&ledc_left);
 
-  ledc_channel_config_t ledc_right = {.channel = LEDC_CHANNEL_3,
+  ledc_channel_config_t ledc_right = {.channel = LEDC_CHANNEL_1,
                                       .duty = 0,
-                                      .gpio_num = 14,
-                                      .speed_mode = LEDC_LOW_SPEED_MODE,
+                                      .gpio_num = 13,
+                                      .speed_mode = LEDC_HIGH_SPEED_MODE,
                                       .hpoint = 0,
-                                      .timer_sel = LEDC_TIMER_1
+                                      .timer_sel = LEDC_TIMER_0
 
   };
   ledc_channel_config(&ledc_right);
