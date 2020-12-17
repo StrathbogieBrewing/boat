@@ -17,8 +17,9 @@
 #include "esp_event.h"
 #include "esp_log.h"
 #include "mdns.h"
+#include "softap.h"
 #include "lwip/apps/netbiosns.h"
-#include "protocol_examples_common.h"
+// #include "protocol_examples_common.h"
 #if CONFIG_EXAMPLE_WEB_DEPLOY_SD
 #include "driver/sdmmc_host.h"
 #endif
@@ -132,7 +133,8 @@ void app_main(void)
     netbiosns_init();
     netbiosns_set_name(CONFIG_EXAMPLE_MDNS_HOST_NAME);
 
-    ESP_ERROR_CHECK(example_connect());
+    // ESP_ERROR_CHECK(example_connect());
+    wifi_init_softap();
     ESP_ERROR_CHECK(init_fs());
     ESP_ERROR_CHECK(start_rest_server(CONFIG_EXAMPLE_WEB_MOUNT_POINT));
 }
